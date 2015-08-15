@@ -1,0 +1,28 @@
+# arg 1:  the new package version
+
+_pkgname=lift
+
+post_install() {
+    cat << EOM
+
+    To load this library with asdf, run the following line
+    (or its for your lisp of choice):
+
+    (asdf:load-system '${_pkgname})
+EOM
+}
+
+post_upgrade() {
+    post_install $1
+}
+
+pre_remove() {
+    rm -f /usr/share/common-lisp/source/$_pkgname/{*.fas,*.fasl,*.lib,*.x86f}
+}
+
+op=$1
+shift
+
+$op $*
+
+# End of file
